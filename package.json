@@ -8,6 +8,7 @@
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build": "bash scripts/build_frontend.bash",
+    "build:render": "bash scripts/build_for_render.sh",
     "build:start": "npm run build && npm run start:prod",
     "start:with-build": "npm run build && npm run start:prod",
     "start": "cd backend && npm run start",
