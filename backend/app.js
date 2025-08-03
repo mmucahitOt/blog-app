@@ -7,6 +7,7 @@ const middleware = require("./utils/middleware");
 const authRouter = require("./controllers/auth");
 const apiRouter = require("./controllers/api/api");
 const testRouter = require("./controllers/test");
+const { feedDataForProd } = require("./utils/feed_data_for_prod");
 
 const app = express();
 
@@ -16,6 +17,9 @@ mongoose
   .connect(config.MONGODB_URI)
   .then(() => {
     logger.info("connected to MongoDB");
+    if (config.NODE_ENV === "production") {
+      feedDataForProd();
+    }
   })
   .catch((error) => {
     logger.error("error connection to MongoDB:", error.message);
