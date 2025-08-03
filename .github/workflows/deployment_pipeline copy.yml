@@ -1,0 +1,119 @@
+name: Deployment pipeline Render
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+jobs:
+  build_and_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies and build
+        run: npm run install-and-build
+      - name: Check style
+        run: npm run eslint
+
+  test_e2e:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    needs: [build_and_lint]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+          
+  version_bump:
+    runs-on: ubuntu-latest
+    needs: [build_and_lint, test_e2e]
+    if: ${{ (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)) && !contains(toJson(github.event.commits.*.message), '#skip') }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_PREFIX: v
+          DEFAULT_BUMP: minor
+
+  deploy:
+    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true) }}
+    runs-on: ubuntu-latest
+    needs: [build_and_lint, test_e2e, version_bump]
+    steps:
+      - name: Trigger deployment
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+      - name: Notify Discord - Deployment Success
+        if: success()
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: Pokedex Deployment Bot
+          avatarUrl: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png
+          text: 🚀 **Deployment Successful!**
+          severity: info
+          color: '#00ff00'
+          title: ✅ Pokedex App Deployed
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** ${{ github.sha }}
+            **Triggered by:** ${{ github.actor }}
+          details: |
+            The Pokedex application has been successfully deployed to production.
+            All tests passed and the deployment pipeline completed successfully.
+          footer: Deployed via GitHub Actions
+
+  notify_build_failure:
+    runs-on: ubuntu-latest
+    if: failure()
+    needs: [build_and_lint, test_e2e]
+    steps:
+      - name: Notify Discord - Build Failure
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: Pokedex Build Bot
+          avatarUrl: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png
+          text: ❌ **Build Failed!**
+          severity: error
+          color: '#ff0000'
+          title: 🚨 Pokedex Build Failure
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** ${{ github.sha }}
+            **Triggered by:** ${{ github.actor }}
+            **Workflow:** ${{ github.workflow }}
+          details: |
+            The build process has failed. Please check the GitHub Actions logs for more details.
+            This could be due to:
+            • Build errors
+            • Test failures
+            • Linting issues
+            • Dependency problems
+          footer: Build failed in GitHub Actions
