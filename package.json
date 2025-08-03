@@ -1,0 +1,48 @@
+{
+  "name": "blog-app",
+  "version": "1.0.0",
+  "description": "Full-stack blog application with React frontend and Express backend",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "build:start": "npm run build && nclpm run start",
+    "build:copy": "npm run build && cp -r frontend/dist backend/dist",
+    "start:with-build": "npm run build:copy && npm run start",
+    "start": "cd backend && npm start",
+    "test": "concurrently \"npm run test:backend\" \"npm run test:frontend\"",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "test:e2e": "cd e2e && npm test",
+    "test:all": "npm run test && npm run test:e2e",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../e2e && npm install",
+    "lint": "concurrently \"npm run lint:backend\" \"npm run lint:frontend\"",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "e2e:install": "cd e2e && npx playwright install",
+    "e2e:ui": "cd e2e && npx playwright test --ui",
+    "e2e:report": "cd e2e && npx playwright show-report"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "backend",
+    "frontend",
+    "e2e"
+  ],
+  "keywords": [
+    "blog",
+    "react",
+    "express",
+    "mongodb",
+    "fullstack"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.11.0"
+  }
+}
