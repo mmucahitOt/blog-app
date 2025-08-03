@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
       - name: Build frontend
         run: npm run build
       - name: Check style both frontend and backend
