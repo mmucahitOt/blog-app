@@ -21,7 +21,7 @@
     "lint": "concurrently \"npm run lint:backend\" \"npm run lint:frontend\"",
     "lint:backend": "cd backend && npm run lint",
     "lint:frontend": "cd frontend && npm run lint",
-    "e2e:install": "cd e2e && npx playwright install",
+    "e2e:install": "cd e2e && npm run install",
     "e2e:ui": "cd e2e && npx playwright test --ui",
     "e2e:report": "cd e2e && npx playwright show-report"
   },
