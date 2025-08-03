@@ -10,6 +10,7 @@
     "build": "bash scripts/build_frontend.bash",
     "build:start": "npm run build && npm run start:prod",
     "start:with-build": "npm run build && npm run start:prod",
+    "start": "cd backend && npm run start",
     "start:prod": "cd backend && npm run start:prod",
     "test": "concurrently \"npm run test:backend\" \"npm run test:frontend\"",
     "test:backend": "cd backend && npm test",
