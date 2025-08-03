@@ -1,4 +1,4 @@
-name: Deployment pipeline Render
+name: Blog App Deployment Pipeline
 
 on:
   push:
@@ -18,6 +18,11 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm run install:all
+      - name: Fix frontend dependencies
+        run: |
+          cd frontend
+          rm -rf node_modules package-lock.json
+          npm install
       - name: Build frontend
         run: npm run build
       - name: Check style both frontend and backend
@@ -36,6 +41,11 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm run install:all
+      - name: Fix frontend dependencies
+        run: |
+          cd frontend
+          rm -rf node_modules package-lock.json
+          npm install
       - name: Install Playwright Browsers
         run: npm run e2e:install
       - name: Run Playwright tests
@@ -76,19 +86,19 @@ jobs:
         uses: rjstone/discord-webhook-notify@v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: Pokedex Deployment Bot
+          username: Blog App Deployment Bot
           avatarUrl: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png
           text: 🚀 **Deployment Successful!**
           severity: info
           color: '#00ff00'
-          title: ✅ Pokedex App Deployed
+          title: ✅ Blog App Deployed
           description: |
             **Repository:** ${{ github.repository }}
             **Branch:** ${{ github.ref_name }}
             **Commit:** ${{ github.sha }}
             **Triggered by:** ${{ github.actor }}
           details: |
-            The Pokedex application has been successfully deployed to production.
+            The Blog App has been successfully deployed to production.
             All tests passed and the deployment pipeline completed successfully.
           footer: Deployed via GitHub Actions
 
@@ -101,12 +111,12 @@ jobs:
         uses: rjstone/discord-webhook-notify@v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: Pokedex Build Bot
+          username: Blog App Build Bot
           avatarUrl: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png
           text: ❌ **Build Failed!**
           severity: error
           color: '#ff0000'
-          title: 🚨 Pokedex Build Failure
+          title: 🚨 Blog App Build Failure
           description: |
             **Repository:** ${{ github.repository }}
             **Branch:** ${{ github.ref_name }}
