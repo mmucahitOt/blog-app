@@ -42,10 +42,10 @@ describe("Blog app", () => {
     await page.goto("http://localhost:5173");
 
     // Reset database before each test
-    await request.post("http://localhost:3001/api/testing/reset-database");
+    await request.post("http://localhost:3000/api/testing/reset-database");
 
     // Create user with blogs
-    await request.post("http://localhost:3001/api/testing/create-user", {
+    await request.post("http://localhost:3000/api/testing/create-user", {
       data: {
         username: user.username,
         name: user.name,
@@ -57,7 +57,7 @@ describe("Blog app", () => {
 
     // Create blogs
     for (const blog of blogs) {
-      await request.post("http://localhost:3001/api/testing/create-blog", {
+      await request.post("http://localhost:3000/api/testing/create-blog", {
         data: {
           title: blog.title,
           author: blog.author,
@@ -86,8 +86,6 @@ describe("Blog app", () => {
         const viewButtons = page
           .getByRole("button")
           .filter({ hasText: /view|hide/ });
-
-
 
         // Click the current button (should be in order)
         const currentButton = viewButtons.nth(i);
