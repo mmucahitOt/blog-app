@@ -18,7 +18,7 @@
     "test:frontend": "cd frontend && npm test",
     "test:e2e": "cd e2e && npm test",
     "test:all": "npm run test && npm run test:e2e",
-    "install:all": "cd backend && npm install && cd ../frontend && npm install && cd ../e2e && npm install",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../e2e && npm install",
     "lint": "concurrently \"npm run lint:backend\" \"npm run lint:frontend\"",
     "lint:backend": "cd backend && npm run lint",
     "lint:frontend": "cd frontend && npm run lint",
