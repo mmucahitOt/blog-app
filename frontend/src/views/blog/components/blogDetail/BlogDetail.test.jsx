@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { test, expect, describe, vi } from 'vitest'
-import BlogDetail from '../BlogDetail/BlogDetail'
+import BlogDetail from './BlogDetail'
 import userEvent from '@testing-library/user-event'
 
 test('does not show url and user name by default', () => {
