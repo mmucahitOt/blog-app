@@ -57,10 +57,35 @@ jobs:
           rm -rf node_modules package-lock.json
           npm install --force
           npm install @rollup/rollup-linux-x64-gnu --force
-      - name: Run services
-        run: npm run dev
+      - name: Install Playwright Browsers
+        run: npm run e2e:install
+      - name: Start backend server
+        run: |
+          cd backend
+          npm run dev &
+          echo $! > backend.pid
+      - name: Start frontend server
+        run: |
+          cd frontend
+          npm run dev &
+          echo $! > frontend.pid
+      - name: Wait for servers to be ready
+        run: |
+          # Wait for backend to be ready
+          wait-on http://localhost:3000/health
+          # Wait for frontend to be ready
+          wait-on http://localhost:5173
       - name: Run Playwright tests
         run: npm run test:e2e
+      - name: Cleanup servers
+        if: always()
+        run: |
+          if [ -f backend/backend.pid ]; then
+            kill $(cat backend/backend.pid) 2>/dev/null || true
+          fi
+          if [ -f frontend/frontend.pid ]; then
+            kill $(cat frontend/frontend.pid) 2>/dev/null || true
+          fi
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
