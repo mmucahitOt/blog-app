@@ -22,7 +22,8 @@ jobs:
         run: |
           cd frontend
           rm -rf node_modules package-lock.json
-          npm install
+          npm install --force
+          npm install @rollup/rollup-linux-x64-gnu --force
       - name: Build frontend
         run: npm run build
       - name: Check style both frontend and backend
@@ -45,7 +46,8 @@ jobs:
         run: |
           cd frontend
           rm -rf node_modules package-lock.json
-          npm install
+          npm install --force
+          npm install @rollup/rollup-linux-x64-gnu --force
       - name: Install Playwright Browsers
         run: npm run e2e:install
       - name: Run Playwright tests
