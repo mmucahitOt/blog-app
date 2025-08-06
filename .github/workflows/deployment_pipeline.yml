@@ -71,10 +71,8 @@ jobs:
           echo $! > frontend.pid
       - name: Wait for servers to be ready
         run: |
-          # Wait for backend to be ready
-          wait-on http://localhost:3000/health
-          # Wait for frontend to be ready
-          wait-on http://localhost:5173
+          # Wait 20 seconds for servers to start
+          sleep 20
       - name: Run Playwright tests
         run: npm run test:e2e
       - name: Cleanup servers
