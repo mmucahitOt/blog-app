@@ -48,8 +48,13 @@ jobs:
           rm -rf node_modules package-lock.json
           npm install --force
           npm install @rollup/rollup-linux-x64-gnu --force
+      - name: Run services
+        run: npm run dev
       - name: Install Playwright Browsers
         run: npm run e2e:install
+      - name: run services
+        run: |
+
       - name: Run Playwright tests
         run: npm run test:e2e
       - uses: actions/upload-artifact@v4
