@@ -62,19 +62,28 @@ jobs:
       - name: Start backend server
         run: |
           cd backend
+          echo "Starting backend server..."
           npm run dev &
           echo $! > backend.pid
       - name: Start frontend server
         run: |
           cd frontend
+          echo "Starting frontend server..."
           npm run dev &
           echo $! > frontend.pid
       - name: Wait for servers to be ready
         run: |
-          # Wait 20 seconds for servers to start
-          sleep 20
+          # Additional wait to ensure everything is fully loaded
+          sleep 10
       - name: Run Playwright tests
-        run: npm run test:e2e
+        run: |
+          echo "Starting E2E tests..."
+          echo "Checking if backend is responding..."
+          curl -f http://localhost:3000/health || echo "Backend health check failed"
+          echo "Checking if frontend is responding..."
+          curl -f http://localhost:5173 || echo "Frontend health check failed"
+          echo "Running E2E tests..."
+          npm run test:e2e
       - name: Cleanup servers
         if: always()
         run: |
