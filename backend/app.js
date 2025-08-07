@@ -34,6 +34,11 @@ if (config.NODE_ENV === "test" || config.NODE_ENV === "development") {
   app.use("/api/testing", testRouter);
 }
 
+// Serve React app for client-side routing (catch all non-API routes)
+app.get(/^(?!\/api|\/auth|\/testing).*/, (req, res) => {
+  res.sendFile("dist/index.html", { root: __dirname });
+});
+
 app.use("/health", (req, res) => {
   res.send("ok");
 });
@@ -43,10 +48,6 @@ app.use("/api", apiRouter);
 
 app.use(middleware.unknownEndpoint);
 
-// Serve React app for client-side routing (catch all non-API routes)
-app.get(/^(?!\/api|\/auth|\/testing).*/, (req, res) => {
-  res.sendFile("dist/index.html", { root: __dirname });
-});
 
 app.use(middleware.errorHandler);
 
