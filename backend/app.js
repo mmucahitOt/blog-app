@@ -8,6 +8,7 @@ const authRouter = require("./controllers/auth");
 const apiRouter = require("./controllers/api/api");
 const testRouter = require("./controllers/test");
 const { feedDataForProd } = require("./utils/feed_data_for_prod");
+const { feedData } = require("./utils/feed_data_for_dev");
 
 const app = express();
 
@@ -17,8 +18,12 @@ mongoose
   .connect(config.MONGODB_URI)
   .then(() => {
     logger.info("connected to MongoDB");
+    console.log(config.NODE_ENV);
     if (config.NODE_ENV === "production") {
       feedDataForProd();
+    }
+    if (config.NODE_ENV === "development") {
+      feedData();
     }
   })
   .catch((error) => {
@@ -47,7 +52,6 @@ app.use("/auth", authRouter);
 app.use("/api", apiRouter);
 
 app.use(middleware.unknownEndpoint);
-
 
 app.use(middleware.errorHandler);
 

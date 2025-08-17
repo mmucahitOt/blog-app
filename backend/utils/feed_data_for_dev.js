@@ -100,13 +100,14 @@ const resetDatabase = async () => {
 
 const feedData = async () => {
   const users = await User.find({});
+  console.log(users);
   if (users.length === 0) {
     await resetDatabase();
     await seedUsers();
     await seedBlogs();
-    logger.info("Data fed for production");
+    logger.info("Data fed for development");
   } else {
-    logger.info("Data already fed for production");
+    logger.info("Data already fed for development");
   }
 };
 

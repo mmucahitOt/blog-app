@@ -1,225 +1,154 @@
 # Blog App - Full Stack Application
 
-A full-stack blog application built with React frontend and Express.js backend.
+A full-stack blog application built with React frontend, Express backend, and MongoDB database.
 
 ## Project Structure
 
 ```
 blog-app/
-├── backend/          # Express.js API server
-├── frontend/         # React application
-├── e2e/              # Playwright E2E tests
-├── package.json      # Root package.json for project management
-└── README.md         # This file
+├── backend/          # Express.js backend API
+├── frontend/         # React frontend application
+├── e2e/             # End-to-end tests with Playwright
+├── scripts/         # Build and deployment scripts
+├── dist/            # Build output directory
+├── package.json     # Unified package management
+├── eslint.config.mjs # Unified ESLint configuration
+├── vite.config.js   # Vite configuration for frontend
+├── playwright.config.js # Playwright configuration for E2E tests
+└── .gitignore       # Unified git ignore rules
 ```
+
+## Features
+
+- **Backend**: Express.js REST API with MongoDB
+- **Frontend**: React with Vite for fast development
+- **Testing**: Unit tests, integration tests, and E2E tests
+- **Linting**: Unified ESLint configuration for all code
+- **Build**: Automated build process for production
 
 ## Quick Start
 
 ### Prerequisites
 
 - Node.js (v18 or higher)
-- MongoDB (for backend)
+- npm or yarn
+- MongoDB (local or cloud)
 
 ### Installation
 
-1. **Install all dependencies:**
+1. Clone the repository
+2. Install all dependencies:
 
    ```bash
    npm run install:all
    ```
 
-2. **Set up environment variables:**
+3. Set up environment variables:
 
-   - Copy `.env.example` to `.env` in the backend directory
-   - Configure your MongoDB connection string and JWT secret
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-3. **Start development servers:**
+4. Start the development servers:
    ```bash
    npm run dev
    ```
-   This will start both backend (port 3001) and frontend (port 5173) concurrently.
+
+This will start both the backend (port 3000) and frontend (port 5173) servers concurrently.
 
 ## Available Scripts
 
-### Root Level (from project root)
+### Development
 
-- `npm run dev` - Start both frontend and backend in development mode
-- `npm run build` - Build the frontend for production
-- `npm run start` - Start the backend in production mode
-- `npm run test` - Run tests for both frontend and backend
-- `npm run test:e2e` - Run E2E tests with Playwright
-- `npm run test:all` - Run all tests (unit + E2E)
-- `npm run lint` - Run linting for both frontend and backend
-- `npm run install:all` - Install dependencies for all packages
+- `npm run dev` - Start both backend and frontend in development mode
+- `npm run dev:backend` - Start only the backend server
+- `npm run dev:frontend` - Start only the frontend server
 
-### Backend (from backend/ directory)
+### Testing
 
-- `npm run dev` - Start backend in development mode with auto-reload
-- `npm start` - Start backend in production mode
-- `npm test` - Run backend tests
-- `npm run lint` - Run backend linting
+- `npm run test` - Run all tests (backend + frontend)
+- `npm run test:backend` - Run backend tests only
+- `npm run test:frontend` - Run frontend tests only
+- `npm run test:e2e` - Run end-to-end tests
+- `npm run test:all` - Run all tests including E2E
 
-### Frontend (from frontend/ directory)
+### Linting
 
-- `npm run dev` - Start frontend development server
-- `npm run build` - Build for production
-- `npm test` - Run frontend tests
-- `npm run lint` - Run frontend linting
+- `npm run lint` - Lint all code (backend + frontend)
+- `npm run lint:backend` - Lint backend code only
+- `npm run lint:frontend` - Lint frontend code only
 
-### E2E Testing (from e2e/ directory)
+### Build & Production
 
-- `npm test` - Run E2E tests with Playwright
-- `npx playwright test --ui` - Run tests with UI mode
-- `npx playwright show-report` - Show test report
-- `npx playwright install` - Install browser binaries
+- `npm run build` - Build frontend for production
+- `npm run build:render` - Build for Render deployment
+- `npm run start` - Start production backend server
+- `npm run start:prod` - Start production backend with environment
+- `npm run preview` - Preview production frontend build
 
-## Development
+### E2E Testing
 
-### Backend API
+- `npm run e2e:install` - Install Playwright browsers
+- `npm run e2e:ui` - Run E2E tests with UI
+- `npm run e2e:report` - Show E2E test reports
 
-- **Port**: 3001 (default)
-- **Database**: MongoDB
-- **Authentication**: JWT tokens
-- **Features**: User management, blog CRUD operations, comments, likes
+## Configuration Files
 
-### Frontend
+### ESLint (`eslint.config.mjs`)
 
-- **Port**: 5173 (default)
-- **Framework**: React with Vite
-- **Features**: User authentication, blog management, responsive UI
+Unified ESLint configuration that handles:
 
-## Environment Variables
+- Backend JavaScript files (CommonJS)
+- Frontend React files (ES modules)
+- E2E test files (ES modules)
 
-Create a `.env` file in the backend directory:
+### Vite (`vite.config.js`)
 
-```env
-MONGODB_URI=mongodb://localhost:27017/blog-app
-JWT_SECRET=your-secret-key
-PORT=3001
-NODE_ENV=development
-```
+Frontend build configuration with:
 
-## API Endpoints
+- React plugin
+- API proxy to backend
+- Test environment setup
+- Production build output
 
-### Authentication
+### Playwright (`playwright.config.js`)
 
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
+E2E testing configuration with:
 
-### Blogs
+- Multiple browser support
+- Automatic server startup
+- Test reporting
 
-- `GET /api/blogs` - Get all blogs
-- `POST /api/blogs` - Create new blog
-- `PUT /api/blogs/:id` - Update blog
-- `DELETE /api/blogs/:id` - Delete blog
-- `POST /api/blogs/:id/like` - Like/unlike blog
+## Development Workflow
 
-### Users
-
-- `GET /api/users` - Get all users
-- `GET /api/users/:id` - Get user by ID
-
-## Testing
-
-### Unit Tests
-
-Run tests for both frontend and backend:
-
-```bash
-npm test
-```
-
-Or run tests individually:
-
-```bash
-# Backend tests
-npm run test:backend
-
-# Frontend tests
-npm run test:frontend
-```
-
-### E2E Tests
-
-Run E2E tests with Playwright:
-
-```bash
-# First start the development servers
-npm run dev
-
-# Then in another terminal, run E2E tests
-npm run test:e2e
-```
-
-Or run all tests (unit + E2E):
-
-```bash
-npm run test:all
-```
-
-**E2E Test Features:**
-
-- Tests user authentication flows
-- Tests blog creation, editing, and deletion
-- Tests like/unlike functionality
-- Cross-browser testing (Chrome, Firefox, Safari)
-- Visual test reports with `npm run e2e:report`
-- UI mode for debugging with `npm run e2e:ui`
+1. **Start Development**: `npm run dev`
+2. **Write Code**: Edit files in `backend/` or `frontend/`
+3. **Run Tests**: `npm run test` or `npm run test:all`
+4. **Lint Code**: `npm run lint`
+5. **Build**: `npm run build`
 
 ## Deployment
 
-### Option 1: Separate Frontend and Backend (Recommended for Development)
+### Render Deployment
 
-1. **Build the frontend:**
+Use the `build:render` script which includes:
 
-   ```bash
-   npm run build
-   ```
+- Frontend build
+- Backend setup
+- Environment configuration
 
-2. **Start the backend in production:**
-   ```bash
-   npm start
-   ```
+### Local Production
 
-### Option 2: Single Server Deployment (Recommended for Production)
-
-1. **Build and copy frontend to backend, then start:**
-   ```bash
-   npm run start:with-build
-   ```
-
-This will:
-
-- Build the frontend React app
-- Copy the built files to `backend/dist/`
-- Start the backend server which serves both API and frontend
-
-### Option 3: Manual Copy
-
-1. **Build the frontend:**
-
-   ```bash
-   npm run build
-   ```
-
-2. **Copy frontend build to backend:**
-
-   ```bash
-   npm run build:copy
-   ```
-
-3. **Start the backend:**
-   ```bash
-   npm start
-   ```
+1. Build the application: `npm run build`
+2. Start production server: `npm run start:prod`
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+1. Follow the ESLint rules
+2. Write tests for new features
+3. Run all tests before committing
+4. Use conventional commit messages
 
 ## License
 
