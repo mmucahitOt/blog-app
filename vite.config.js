@@ -5,7 +5,14 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./frontend",
-  plugins: [react()],
+  plugins: [
+    react({
+      // Enable the new JSX transform (React 17+)
+      jsxRuntime: "automatic",
+      // This allows using JSX without importing React
+      jsxImportSource: "react",
+    }),
+  ],
   server: {
     proxy: {
       "/api": {

@@ -9,17 +9,7 @@ echo "Starting Render build process..."
 echo "Cleaning dist directories..."
 rm -rf frontend/dist backend/dist
 
-# Install backend dependencies
-echo "Installing backend dependencies..."
-cd backend
+# install dependencies
 npm install
-cd ..
-
-# Install frontend dependencies and build
-echo "Installing frontend dependencies..."
-cd frontend
-npm install
-npm run build
-cp -r dist ../backend/dist
 
 echo "Render build completed successfully!" 

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import localStorageService from './services/localStorageService'
 import LoginView from './views/login/LoginView'
 import Notification from './components/Notification'

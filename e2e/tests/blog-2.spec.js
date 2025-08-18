@@ -43,11 +43,11 @@ describe("Blog app", () => {
 
     // Reset database before each test
     console.log("Resetting database...");
-    await request.post("http://localhost:3000/api/testing/reset-database");
-
+    
+await request.get("http://localhost:3000/testing/reset-database");
     // Create user with blogs
     console.log("Creating user...");
-    await request.post("http://localhost:3000/api/testing/create-user", {
+    await request.post("http://localhost:3000/testing/create-user", {
       data: {
         username: user.username,
         name: user.name,
@@ -61,7 +61,7 @@ describe("Blog app", () => {
     console.log("Creating blogs...");
     for (const blog of blogs) {
       console.log(`Creating blog: ${blog.title} by ${blog.author}`);
-      await request.post("http://localhost:3000/api/testing/create-blog", {
+      await request.post("http://localhost:3000/testing/create-blog", {
         data: {
           title: blog.title,
           author: blog.author,
@@ -94,9 +94,27 @@ describe("Blog app", () => {
       const headingVisible = await heading.isVisible();
       console.log("Blogs heading visible:", headingVisible);
 
+      // Debug: Check for any heading
+      const allHeadings = page.getByRole("heading");
+      const headingCount = await allHeadings.count();
+      console.log("Total headings found:", headingCount);
+      for (let i = 0; i < headingCount; i++) {
+        const headingText = await allHeadings.nth(i).textContent();
+        console.log(`Heading ${i}: "${headingText}"`);
+      }
+
       // Debug: Check for any blog-related content
       const allText = await page.textContent("body");
       console.log("Page text content:", allText.substring(0, 500) + "...");
+
+      // Debug: Check for any blog-related elements
+      const blogElements = page.locator("div").filter({ hasText: /Test Blog/ });
+      const blogElementCount = await blogElements.count();
+      console.log("Blog elements found:", blogElementCount);
+      for (let i = 0; i < Math.min(blogElementCount, 5); i++) {
+        const blogText = await blogElements.nth(i).textContent();
+        console.log(`Blog element ${i}: "${blogText}"`);
+      }
 
       // Wait for all blog titles to be visible (title + author format)
       console.log("Looking for blog titles with author...");

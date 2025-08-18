@@ -3,6 +3,7 @@ require("dotenv").config({
   path: path.join(__dirname, "../../.env"),
 });
 
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 const NODE_ENV = process.env.NODE_ENV;
 const PORT = process.env.PORT || 3000;
 let MONGODB_URI = process.env.MONGODB_URI;

@@ -3,10 +3,8 @@
 # Clean existing dist directories to avoid permission issues
 rm -rf frontend/dist backend/dist
 
-cd frontend
-npm install
-npm run build
-cp -r dist ../backend/dist
+npm run build:frontend
+cp -r frontend/dist backend/dist
 
-cd ../backend
+cd backend
 npm install

@@ -1,3 +1,4 @@
+import React from 'react'
 import Form from '../../../components/common/form/Form'
 import localStorageService from '../../../services/localStorageService'
 import PropTypes from 'prop-types'

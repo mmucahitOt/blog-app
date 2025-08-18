@@ -12,6 +12,11 @@ const loginWith = async ({ page, username, password }) => {
   await page.getByRole("textbox", { name: "Username" }).fill(username);
   await page.getByRole("textbox", { name: "Password" }).fill(password);
   await page.getByRole("button", { name: "Login" }).click();
+
+  // Wait for the page to update after login
+  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForTimeout(2000);
 };
 
 const clearLocalStorage = async (page) => {

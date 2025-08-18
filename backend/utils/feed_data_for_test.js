@@ -6,8 +6,8 @@ const logger = require("./logger");
 
 const test = {
   _id: new mongoose.Types.ObjectId("5a422a851b54a676234d17f7"),
-  username: "test-dev",
-  name: "test-dev",
+  username: "test",
+  name: "test",
   password: "test1234",
 };
 
@@ -98,17 +98,11 @@ const resetDatabase = async () => {
   await Blog.deleteMany({});
 };
 
-const feedDataForDev = async () => {
-  const users = await User.find({});
-  console.log(users);
-  if (users.length === 0) {
-    await resetDatabase();
-    await seedUsers();
-    await seedBlogs();
-    logger.info("Data fed for development");
-  } else {
-    logger.info("Data already fed for development");
-  }
+const feedDataForTest = async () => {
+  await resetDatabase();
+  await seedUsers();
+  await seedBlogs();
+  logger.info("Data fed for e2e testing");
 };
 
-module.exports = { feedDataForDev };
+module.exports = { feedDataForTest };

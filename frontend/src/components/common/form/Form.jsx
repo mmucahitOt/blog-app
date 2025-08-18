@@ -1,3 +1,5 @@
+import React from 'react'
+
 const Form = ({ children, formTitle, formProps, buttonText, buttonProps }) => {
   return (
     <div>
