@@ -24,7 +24,7 @@ describe("Blog app", () => {
   });
 
   afterEach(async ({ page, request }) => {
-    await request.post("http://localhost:3000/api/testing/reset-database");
+    await request.get("http://localhost:3000/api/testing/reset-database");
   });
 
   test("Login form is shown", async ({ page }) => {

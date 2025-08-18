@@ -35,7 +35,7 @@ testRouter.post("/create-blog", async (request, response) => {
   response.json(blog);
 });
 
-testRouter.post("/reset-database", async (request, response) => {
+testRouter.get("/reset-database", async (request, response) => {
   await User.deleteMany({});
   await Blog.deleteMany({});
   response.json({ message: "Database reset" });

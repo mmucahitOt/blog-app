@@ -43,7 +43,7 @@ describe("Blog app", () => {
 
     // Reset database before each test
     console.log("Resetting database...");
-    await request.post("http://localhost:3000/api/testing/reset-database");
+    await request.get("http://localhost:3000/api/testing/reset-database");
 
     // Create user with blogs
     console.log("Creating user...");

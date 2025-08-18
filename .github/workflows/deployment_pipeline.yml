@@ -61,7 +61,7 @@ jobs:
         run: |
           cd backend
           echo "Starting backend server..."
-          npm run dev &
+          npm run dev:e2e &
           echo $! > backend.pid
       - name: Start frontend server
         run: |
