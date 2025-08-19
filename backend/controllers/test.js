@@ -38,8 +38,16 @@ testRouter.post("/create-blog", async (request, response, next) => {
       blogOptions._id = new mongoose.Types.ObjectId(id);
     }
     const blog = new Blog(blogOptions);
-    await blog.save();
-    return response.json(blog);
+    const result = await blog.save();
+
+    // Update user's blogs array if userId is provided
+    if (userId) {
+      await User.findByIdAndUpdate(userId, {
+        $push: { blogs: result._id },
+      });
+    }
+
+    return response.json(result);
   } catch (error) {
     next(error);
   }

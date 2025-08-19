@@ -1,10 +1,10 @@
 const createBlog = async ({ page, blog }) => {
-  await page.getByRole("button", { name: "New blog" }).click();
+  await page.getByRole("button", { name: "new blog" }).click();
   await page.getByRole("textbox", { name: "Title" }).fill(blog.title);
   await page.getByRole("textbox", { name: "Author" }).fill(blog.author);
   await page.getByRole("textbox", { name: "Url" }).fill(blog.url);
   await page.getByRole("button", { name: "Create" }).click();
-  await page.waitForLoadState("networkidle", { timeout: 1000 });
+  await page.waitForLoadState("networkidle", { timeout: 10000 });
   await page.getByRole("button", { name: "Cancel" }).click();
 };
 

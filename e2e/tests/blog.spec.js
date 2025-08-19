@@ -43,7 +43,7 @@ describe("Blog app", () => {
   test("Login form is shown", async ({ page }) => {
     await page.waitForLoadState("networkidle");
     const locator = page.getByRole("heading", { name: /Login/ });
-    await expect(locator).toBeVisible({ timeout: 10000 });
+    await expect(locator).toBeVisible({ timeout: 5000 });
   });
 
   describe("Login", () => {
@@ -52,17 +52,17 @@ describe("Blog app", () => {
 
       // Wait for and fill username
       const usernameInput = page.getByRole("textbox", { name: "Username" });
-      await usernameInput.waitFor({ state: "visible", timeout: 10000 });
+      await usernameInput.waitFor({ state: "visible", timeout: 5000 });
       await usernameInput.fill(user.username);
 
       // Wait for and fill password
       const passwordInput = page.getByRole("textbox", { name: "Password" });
-      await passwordInput.waitFor({ state: "visible", timeout: 10000 });
+      await passwordInput.waitFor({ state: "visible", timeout: 5000 });
       await passwordInput.fill(user.password);
 
       // Wait for and click login button
       const loginButton = page.getByRole("button", { name: "Login" });
-      await loginButton.waitFor({ state: "visible", timeout: 10000 });
+      await loginButton.waitFor({ state: "visible", timeout: 5000 });
       await expect(loginButton).toBeEnabled();
       await loginButton.click();
 
@@ -70,29 +70,29 @@ describe("Blog app", () => {
       await page.waitForLoadState("networkidle");
       await page.waitForLoadState("domcontentloaded");
 
-      const blogsHeading = page.getByRole("heading", { name: "Blogs" });
-      await expect(blogsHeading).toBeVisible({ timeout: 10000 });
+      const blogsHeading = page.getByRole("heading", { name: /blogs/i });
+      await expect(blogsHeading).toBeVisible({ timeout: 5000 });
     });
 
     test("Login with invalid credentials", async ({ page }) => {
       await page.waitForLoadState("networkidle");
 
       const usernameInput = page.getByRole("textbox", { name: "Username" });
-      await usernameInput.waitFor({ state: "visible", timeout: 10000 });
+      await usernameInput.waitFor({ state: "visible", timeout: 5000 });
       await usernameInput.fill(user.username);
 
       const passwordInput = page.getByRole("textbox", { name: "Password" });
-      await passwordInput.waitFor({ state: "visible", timeout: 10000 });
+      await passwordInput.waitFor({ state: "visible", timeout: 5000 });
       await passwordInput.fill("invalid");
 
       const loginButton = page.getByRole("button", { name: "Login" });
-      await loginButton.waitFor({ state: "visible", timeout: 10000 });
+      await loginButton.waitFor({ state: "visible", timeout: 5000 });
       await expect(loginButton).toBeEnabled();
       await loginButton.click();
 
       await page.waitForLoadState("networkidle");
       await expect(page.getByRole("heading", { name: /Login/ })).toBeVisible({
-        timeout: 10000,
+        timeout: 5000,
       });
     });
   });
@@ -130,11 +130,11 @@ describe("Blog app", () => {
         .filter({ hasText: newBlog.title })
         .first();
       const viewButton = blogContainer.getByRole("button", { name: "view" });
-      await viewButton.waitFor({ state: "visible", timeout: 10000 });
+      await viewButton.waitFor({ state: "visible", timeout: 5000 });
       await viewButton.click();
 
       const likeButton = page.getByRole("button", { name: "like" });
-      await likeButton.waitFor({ state: "visible", timeout: 10000 });
+      await likeButton.waitFor({ state: "visible", timeout: 5000 });
       await likeButton.click();
 
       await page.waitForLoadState("networkidle");
@@ -179,7 +179,7 @@ describe("Blog app", () => {
 
       // First verify the blog title is visible
       await expect(page.getByText(newBlog.title)).toBeVisible({
-        timeout: 10000,
+        timeout: 5000,
       });
 
       // Then click view to expand the blog details - find the specific blog's view button
@@ -188,13 +188,13 @@ describe("Blog app", () => {
         .filter({ hasText: newBlog.title })
         .first();
       const viewButton = blogContainer.getByRole("button", { name: "view" });
-      await viewButton.waitFor({ state: "visible", timeout: 10000 });
+      await viewButton.waitFor({ state: "visible", timeout: 5000 });
       await viewButton.click();
 
       // Now check that the delete button is not visible after expanding
       await expect(
         page.getByRole("button", { name: "delete" })
-      ).not.toBeVisible({ timeout: 10000 });
+      ).not.toBeVisible({ timeout: 5000 });
     });
 
     test("A blog can be deleted", async ({ page }) => {
@@ -203,7 +203,7 @@ describe("Blog app", () => {
 
       // Wait for the blog to be visible
       await expect(page.getByText(newBlog.title)).toBeVisible({
-        timeout: 10000,
+        timeout: 5000,
       });
 
       // Find the specific blog's view button
@@ -212,7 +212,7 @@ describe("Blog app", () => {
         .filter({ hasText: newBlog.title })
         .first();
       const viewButton = blogContainer.getByRole("button", { name: "view" });
-      await viewButton.waitFor({ state: "visible", timeout: 10000 });
+      await viewButton.waitFor({ state: "visible", timeout: 5000 });
       await viewButton.click();
 
       // Set up dialog handler before clicking delete
@@ -222,12 +222,12 @@ describe("Blog app", () => {
       });
 
       const deleteButton = page.getByRole("button", { name: "delete" });
-      await deleteButton.waitFor({ state: "visible", timeout: 10000 });
+      await deleteButton.waitFor({ state: "visible", timeout: 5000 });
       await deleteButton.click();
 
-      await page.waitForLoadState("networkidle", { timeout: 10000 });
+      await page.waitForLoadState("networkidle", { timeout: 5000 });
       await expect(page.getByText(newBlog.title)).not.toBeVisible({
-        timeout: 10000,
+        timeout: 5000,
       });
     });
   });
