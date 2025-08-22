@@ -11,10 +11,6 @@ on:
 jobs:
   build_lint:
     runs-on: ubuntu-latest
-    env:
-      NODE_ENV: test
-      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
-      SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
