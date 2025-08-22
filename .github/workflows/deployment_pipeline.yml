@@ -22,8 +22,6 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm install
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
       - name: Build frontend
         run: npm run build
       - name: Check style both frontend and backend
@@ -39,6 +37,8 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
       - name: Start backend server
         run: |
           echo "Starting backend server..."
