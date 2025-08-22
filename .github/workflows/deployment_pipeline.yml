@@ -39,34 +39,8 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: Start backend server
-        run: |
-          echo "Starting backend server..."
-          npm run dev:backend:e2e &
-          echo $! > backend.pid
-      - name: Start frontend server
-        run: |
-          echo "Starting frontend server..."
-          npm run dev:frontend &
-          echo $! > frontend.pid
-      - name: Wait for servers to be ready
-        run: |
-          # Additional wait to ensure everything is fully loaded
-          sleep 10
-          echo "Checking server status..."
-          echo "Backend status:"
-          curl -s http://localhost:3000/health || echo "Backend not ready"
-          echo "Frontend status:"
-          curl -s -I http://localhost:5173 | head -1 || echo "Frontend not ready"
-      - name: Run Playwright tests individually
-        run: |
-          echo "Starting E2E tests individually to avoid race conditions..."
-          echo "Checking if backend is responding..."
-          curl -f http://localhost:3000/health || echo "Backend health check failed"
-          echo "Checking if frontend is responding..."
-          curl -f http://localhost:5173 || echo "Frontend health check failed"
-          echo "Running E2E tests individually..."
-          npm run test:e2e:all-individual
+      - name: Run Playwright tests
+        run: npm run test:e2e
       - name: Show test results
         run: |
           echo "=== E2E Test Results ==="
