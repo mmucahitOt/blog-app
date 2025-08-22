@@ -30,20 +30,13 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     needs: [build_lint]
-    env:
-      NODE_ENV: test
-      MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
-      SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install dependencies
-        run: npm install
-      - name: Build frontend for E2E tests
-        run: npm run build
+        run: npm ci
       - name: Start backend server
         run: |
           echo "Starting backend server..."
@@ -63,9 +56,6 @@ jobs:
           curl -s http://localhost:3000/health || echo "Backend not ready"
           echo "Frontend status:"
           curl -s -I http://localhost:5173 | head -1 || echo "Frontend not ready"
-
-      - name: Install Playwright Browsers
-        run: npm run e2e:install
       - name: Run Playwright tests individually
         run: |
           echo "Starting E2E tests individually to avoid race conditions..."
@@ -75,16 +65,7 @@ jobs:
           curl -f http://localhost:5173 || echo "Frontend health check failed"
           echo "Running E2E tests individually..."
           npm run test:e2e:all-individual
-        continue-on-error: true
-
-      - name: Run Playwright tests sequentially (fallback)
-        if: failure()
-        run: |
-          echo "Individual tests failed, trying sequential execution as fallback..."
-          npm run test:e2e:sequential
-
       - name: Show test results
-        if: always()
         run: |
           echo "=== E2E Test Results ==="
           if [ -d "e2e/playwright-report" ]; then
@@ -98,7 +79,6 @@ jobs:
           fi
           echo "=== End Test Results ==="
       - name: Cleanup servers
-        if: always()
         run: |
           if [ -f backend.pid ]; then
             kill $(cat backend.pid) 2>/dev/null || true
@@ -133,7 +113,11 @@ jobs:
           DEFAULT_BUMP: minor
 
   deploy:
-    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true) }}
+    if: |
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && 
+       github.event.action == 'closed' && 
+       github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     needs: [build_lint, test_e2e, version_bump]
     steps:

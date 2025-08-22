@@ -19,14 +19,13 @@
     "test": "concurrently \"npm run test:backend\" \"npm run test:frontend\"",
     "test:backend": "cd backend && node --test tests/**/*.tests.js",
     "test:frontend": "vitest run",
-    "test:e2e": "cd e2e && npm test",
+    "test:e2e": "cd e2e && npx playwright test",
     "test:e2e:sequential": "cd e2e && npx playwright test --workers=1",
     "test:e2e:login": "cd e2e && npx playwright test login.spec.js",
     "test:e2e:blog": "cd e2e && npx playwright test blog.spec.js",
     "test:e2e:blog2": "cd e2e && npx playwright test blog-2.spec.js",
     "test:e2e:all-individual": "npm run test:e2e:login && npm run test:e2e:blog && npm run test:e2e:blog2",
     "test:all": "npm run test && npm run test:e2e:all-individual",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../e2e && npm install",
     "lint": "concurrently \"npm run lint:backend\" \"npm run lint:frontend\"",
     "lint:backend": "eslint backend/",
     "lint:frontend": "eslint frontend/",
@@ -37,8 +36,7 @@
   },
   "workspaces": [
     "backend",
-    "frontend",
-    "e2e"
+    "frontend"
   ],
   "keywords": [
     "blog",
