@@ -40,7 +40,7 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.use("/health", (req, res) => {
-  res.send("ok");
+  res.status(200).send("ok!");
 });
 
 app.use("/auth", authRouter);
